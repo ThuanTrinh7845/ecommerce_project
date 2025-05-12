@@ -55,5 +55,41 @@ def insert_assessment_order():
     finally:
         conn.close()
 
+def calculate_avg_order_value_2025():
+    conn = sqlite3.connect("ecommerce.db")
+    cursor = conn.cursor()
+    
+    query = """
+    WITH months AS (
+        SELECT 1 AS month
+        UNION ALL
+        SELECT month + 1
+        FROM months
+        WHERE month < 12
+    )
+    SELECT 
+        m.month,
+        COALESCE(ROUND(AVG(o.subtotal), 2), 0.00) AS average_order_value
+    FROM months m
+    LEFT JOIN orders o 
+        ON CAST(strftime('%m', o.order_date) AS INTEGER) = m.month
+        AND strftime('%Y', o.order_date) = '2025'
+    GROUP BY m.month
+    ORDER BY m.month;
+    """
+    
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("| month | average_order_value |")
+    print("-" * 30)
+    for row in rows:
+        print(f"| {row[0]:<5} | {row[1]:<19} |")
+    
+    conn.close()
+
+
+
 if __name__ == "__main__":
-    insert_assessment_order()
+    #insert_assessment_order()
+    calculate_avg_order_value_2025()
