@@ -217,8 +217,6 @@ async def create_order(order: OrderCreate, background_tasks: BackgroundTasks):
         return order_response
 
 def process_payment(payment_method: str, amount: float) -> bool:
-    # Giả lập xử lý thanh toán
-    # 90% thành công, 10% thất bại
     import random
     success = random.random() < 0.9
     return success

@@ -121,23 +121,3 @@ CREATE TABLE order_items (
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (variant_id) REFERENCES product_variants(variant_id)
 );
-
--- Bảng voucher áp dụng cho đơn hàng
-CREATE TABLE order_vouchers (
-    order_voucher_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_id INTEGER NOT NULL,
-    user_voucher_id INTEGER NOT NULL,
-    discount_amount DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_voucher_id) REFERENCES user_vouchers(user_voucher_id)
-);
-
--- Bảng lịch sử trạng thái đơn hàng
-CREATE TABLE order_status_history (
-    history_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_id INTEGER NOT NULL,
-    status TEXT NOT NULL,
-    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    notes TEXT,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
-);
